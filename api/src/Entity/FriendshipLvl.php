@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Repository\FriendshipLvlRepository;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as JMS;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=FriendshipLvlRepository::class)
@@ -19,16 +21,32 @@ class FriendshipLvl
 
     /**
      * @ORM\Column(type="integer")
+     * 
+     * @JMS\Type("strict_integer")
+     * 
+     * @Assert\NotBlank
+     * @Assert\Type("integer")
      */
     private $lvl;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * 
+     * @JMS\Type("strict_string")
+     * 
+     * @Assert\NotBlank
+     * @Assert\Length(max="255")
+     * @Assert\Type("string")
      */
     private $rankName;
 
     /**
      * @ORM\Column(type="integer")
+     * 
+     * @JMS\Type("strict_integer")
+     * 
+     * @Assert\NotBlank
+     * @Assert\Type("integer")
      */
     private $nrgBonus;
 
