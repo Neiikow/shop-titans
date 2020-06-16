@@ -25,6 +25,7 @@ class ShopExpansion
      * @JMS\Type("strict_integer")
      * 
      * @Assert\NotBlank
+     * @Assert\Type("integer")
      */
     private $tier;
 
