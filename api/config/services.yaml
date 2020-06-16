@@ -17,3 +17,8 @@ services:
         class: App\Bundle\Serializer\StrictIntegerHandler
         tags:
             - { name: jms_serializer.subscribing_handler }
+
+    app.bundle.serializer.strictstring:
+        class: App\Bundle\Serializer\StrictStringHandler
+        tags:
+            - { name: jms_serializer.subscribing_handler }
