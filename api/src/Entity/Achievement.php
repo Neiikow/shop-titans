@@ -72,7 +72,7 @@ class Achievement
     private $gemReward;
 
     /**
-     * @ORM\OneToOne(targetEntity=Achievement::class, inversedBy="nextTier")
+     * @ORM\OneToOne(targetEntity=Achievement::class, inversedBy="nextTier", cascade="persist")
      */
     private $prevTier;
 
