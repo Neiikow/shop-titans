@@ -53,8 +53,6 @@ class Pack
     /**
      * @ORM\Column(type="date", nullable=true)
      * 
-     * @JMS\Type("date")
-     * 
      * @Assert\Type("date")
      */
     private $releaseDate;
