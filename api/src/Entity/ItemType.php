@@ -43,7 +43,7 @@ class ItemType
     /**
      * @ORM\ManyToOne(targetEntity=ItemCategory::class, inversedBy="types")
      * 
-     * @JMS\MaxDepth(2)
+     * @JMS\MaxDepth(1)
      */
     private $category;
 

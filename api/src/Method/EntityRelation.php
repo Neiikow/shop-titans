@@ -30,4 +30,25 @@ Class EntityRelation extends Controller
         }
         return $entity->$setProperty(null);
     }
+
+    public function createManyToOne($em, $entity, $property, $relation, $data=null)
+    {
+        $getProperty = "get".ucfirst($property);
+        $setProperty = "set".ucfirst($property);
+
+        if ($entity->$getProperty() && $entity->$getProperty()->getId()) {
+            $id = $em->getRepository("App\Entity\\".$relation)->find($entity->$getProperty()->getId());
+            if (!$id) {
+                throw $this->createNotFoundException('Relation impossible : Ressource introuvable');
+            }
+            if (isset($data)) {
+                return $data->$setProperty($id);
+            }
+            return $entity->$setProperty($id);
+        }
+        if (isset($data)) {
+            return $data->$setProperty(null);
+        }
+        return $entity->$setProperty(null);
+    }
 }

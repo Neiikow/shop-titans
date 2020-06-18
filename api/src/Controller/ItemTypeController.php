@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\ItemType;
+use App\Method\EntityRelation;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\Validator\ConstraintViolationList;
@@ -17,7 +18,7 @@ class ItemTypeController extends FOSRestController
      *    path = "/api/admin/item/type/create",
      *    name = "itemType_create"
      * )
-     * @Rest\View(StatusCode = 201)
+     * @Rest\View(StatusCode = 201, serializerEnableMaxDepthChecks=true)
      * @ParamConverter("type", converter="fos_rest.request_body")
      */
     public function create(ItemType $type, ConstraintViolationList $violations)
@@ -32,6 +33,10 @@ class ItemTypeController extends FOSRestController
         }
 
         $em = $this->getDoctrine()->getManager();
+        $er = new EntityRelation;
+
+        $type = $er->createManyToOne($em, $type, 'category', 'ItemCategory');
+        
         $em->persist($type);
         $em->flush();
 
@@ -51,7 +56,7 @@ class ItemTypeController extends FOSRestController
      *    name = "itemType_update",
      *    requirements = {"id"="\d+"}
      * )
-     * @Rest\View
+     * @Rest\View(serializerEnableMaxDepthChecks=true)
      * @ParamConverter("type", converter="fos_rest.request_body")
      */
     public function update($id, ItemType $type, ConstraintViolationList $violations)
@@ -65,6 +70,7 @@ class ItemTypeController extends FOSRestController
         }
 
         $em = $this->getDoctrine()->getManager();
+        $er = new EntityRelation;
         $data = $em->getRepository(ItemType::class)->find($id);        
 
         if (!$data) {
@@ -72,6 +78,8 @@ class ItemTypeController extends FOSRestController
                 'Type introuvable'
             );
         }
+
+        $type = $er->createManyToOne($em, $type, 'category', 'ItemCategory', $data);
 
         $data->setName($type->getName());
         $data->setImg($type->getImg());
@@ -87,7 +95,7 @@ class ItemTypeController extends FOSRestController
      *    name = "itemType_delete",
      *    requirements = {"id"="\d+"}
      * )
-     * @Rest\View
+     * @Rest\View(serializerEnableMaxDepthChecks=true)
      */
     public function delete($id)
     {
@@ -112,7 +120,7 @@ class ItemTypeController extends FOSRestController
      *    name = "itemType_id",
      *    requirements = {"id"="\d+"}
      * )
-     * @Rest\View
+     * @Rest\View(serializerEnableMaxDepthChecks=true)
      */
     public function readId($id)
     {
@@ -132,7 +140,7 @@ class ItemTypeController extends FOSRestController
      *    path = "/api/item/type",
      *    name = "itemType_list",
      * )
-     * @Rest\View
+     * @Rest\View(serializerEnableMaxDepthChecks=true)
      */
     public function readAll()
     {

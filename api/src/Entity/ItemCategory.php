@@ -45,7 +45,7 @@ class ItemCategory
     /**
      * @ORM\OneToMany(targetEntity=ItemType::class, mappedBy="category")
      * 
-     * @JMS\MaxDepth(2)
+     * @JMS\MaxDepth(1)
      */
     private $types;
 
