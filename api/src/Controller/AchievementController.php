@@ -33,7 +33,7 @@ class AchievementController extends FOSRestController
         $em = $this->getDoctrine()->getManager();
         $er = new EntityRelation;
 
-        $achievement = $er->createOneToOne($em, $achievement, "prevTier", "Achievement");
+        $er->createOneToOne($em, $achievement, "prevTier", "Achievement");
         
         $em->persist($achievement);
         $em->flush();

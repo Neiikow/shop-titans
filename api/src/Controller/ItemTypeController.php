@@ -35,7 +35,7 @@ class ItemTypeController extends FOSRestController
         $em = $this->getDoctrine()->getManager();
         $er = new EntityRelation;
 
-        $type = $er->createManyToOne($em, $type, 'category', 'ItemCategory');
+        $er->createManyToOne($em, $type, 'category', 'ItemCategory');
         
         $em->persist($type);
         $em->flush();
@@ -79,7 +79,7 @@ class ItemTypeController extends FOSRestController
             );
         }
 
-        $type = $er->createManyToOne($em, $type, 'category', 'ItemCategory', $data);
+        $er->createManyToOne($em, $type, 'category', 'ItemCategory', $data);
 
         $data->setName($type->getName());
         $data->setImg($type->getImg());

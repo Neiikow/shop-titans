@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\GuildBoostRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -71,6 +73,16 @@ class GuildBoost
      */
     private $renowmCost;
 
+    /**
+     * @ORM\OneToMany(targetEntity=GuildUpgrade::class, mappedBy="boost", orphanRemoval=true)
+     */
+    private $upgrades;
+
+    public function __construct()
+    {
+        $this->upgrades = new ArrayCollection();
+    }
+
     public function getId(): ?int { return $this->id; }
 
     public function getName(): ?string { return $this->name; }
@@ -110,6 +122,34 @@ class GuildBoost
     public function setRenowmCost(int $renowmCost): self
     {
         $this->renowmCost = $renowmCost;
+        return $this;
+    }
+
+    /**
+     * @return Collection|GuildUpgrade[]
+     */
+    public function getUpgrades(): Collection { return $this->upgrades; }
+
+    public function addUpgrade(GuildUpgrade $upgrade): self
+    {
+        if (!$this->upgrades->contains($upgrade)) {
+            $this->upgrades[] = $upgrade;
+            $upgrade->setBoost($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUpgrade(GuildUpgrade $upgrade): self
+    {
+        if ($this->upgrades->contains($upgrade)) {
+            $this->upgrades->removeElement($upgrade);
+            
+            if ($upgrade->getBoost() === $this) {
+                $upgrade->setBoost(null);
+            }
+        }
+
         return $this;
     }
 }

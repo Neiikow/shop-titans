@@ -34,7 +34,7 @@ class SkillController extends FOSRestController
         $em = $this->getDoctrine()->getManager();
         $er = new EntityRelation;
 
-        $skill = $er->createOneToOne($em, $skill, "prevTier", "Skill");
+        $er->createOneToOne($em, $skill, "prevTier", "Skill");
 
         $em->persist($skill);
         $em->flush();
