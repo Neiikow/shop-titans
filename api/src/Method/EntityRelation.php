@@ -2,8 +2,9 @@
 namespace App\Method;
 
 use App\Exception\ResourceValidationException;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-Class EntityRelation
+Class EntityRelation extends Controller
 {
     public function createOneToOne($em, $entity, $property, $relation)
     {
