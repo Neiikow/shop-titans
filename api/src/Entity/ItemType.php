@@ -2,17 +2,15 @@
 
 namespace App\Entity;
 
-use App\Repository\ItemCategoryRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Repository\ItemTypeRepository;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity(repositoryClass=ItemCategoryRepository::class)
+ * @ORM\Entity(repositoryClass=ItemTypeRepository::class)
  */
-class ItemCategory
+class ItemType
 {
     /**
      * @ORM\Id()
@@ -43,16 +41,11 @@ class ItemCategory
     private $img;
 
     /**
-     * @ORM\OneToMany(targetEntity=ItemType::class, mappedBy="category")
+     * @ORM\ManyToOne(targetEntity=ItemCategory::class, inversedBy="types")
      * 
      * @JMS\MaxDepth(2)
      */
-    private $types;
-
-    public function __construct()
-    {
-        $this->types = new ArrayCollection();
-    }
+    private $category;
 
     public function getId(): ?int { return $this->id; }
 
@@ -72,31 +65,11 @@ class ItemCategory
         return $this;
     }
 
-    /**
-     * @return Collection|ItemType[]
-     */
-    public function getTypes(): Collection { return $this->types; }
+    public function getCategory(): ?ItemCategory { return $this->category; }
 
-    public function addType(ItemType $type): self
+    public function setCategory(?ItemCategory $category): self
     {
-        if (!$this->types->contains($type)) {
-            $this->types[] = $type;
-            $type->setCategory($this);
-        }
-
-        return $this;
-    }
-
-    public function removeType(ItemType $type): self
-    {
-        if ($this->types->contains($type)) {
-            $this->types->removeElement($type);
-            
-            if ($type->getCategory() === $this) {
-                $type->setCategory(null);
-            }
-        }
-
+        $this->category = $category;
         return $this;
     }
 }
