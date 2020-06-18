@@ -102,6 +102,17 @@ class Skill
      */
     private $nextTier;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     * 
+     * @JMS\Type("strict_string")
+     * 
+     * @Assert\NotBlank
+     * @Assert\Type("string")
+     * @Assert\Length(max="255")
+     */
+    private $rarity;
+
     public function getId(): ?int { return $this->id; }
 
     public function getName(): ?string { return $this->name; }
@@ -179,6 +190,14 @@ class Skill
             $nextTier->setPrevTier($newPrevTier);
         }
 
+        return $this;
+    }
+
+    public function getRarity(): ?string { return $this->rarity; }
+
+    public function setRarity(string $rarity): self
+    {
+        $this->rarity = $rarity;
         return $this;
     }
 }

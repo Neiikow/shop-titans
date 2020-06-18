@@ -81,6 +81,7 @@ class SkillController extends FOSRestController
         $data->setImg($skill->getImg());
         $data->setDescription($skill->getDescription());
         $data->setType($skill->getType());
+        $data->setRarity($skill->getRarity());
         $data->setTier($skill->getTier());
         $data->setElementCost($skill->getElementCost());
         $data->setEffect($skill->getEffect());
