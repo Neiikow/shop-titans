@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Achievement;
+use App\Method\EntityRelation;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\Validator\ConstraintViolationList;
@@ -29,8 +30,11 @@ class AchievementController extends FOSRestController
             }
             throw new ResourceValidationException($message);
         }
-
         $em = $this->getDoctrine()->getManager();
+        $er = new EntityRelation;
+
+        $achievement = $er->createOneToOne($em, $achievement, "prevTier", "Achievement");
+        
         $em->persist($achievement);
         $em->flush();
 
