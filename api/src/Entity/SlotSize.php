@@ -21,6 +21,11 @@ class SlotSize
 
     /**
      * @ORM\Column(type="integer")
+     * 
+     * @JMS\Type("strict_integer")
+     * 
+     * @Assert\NotBlank
+     * @Assert\Type("integer")
      */
     private $size;
 
