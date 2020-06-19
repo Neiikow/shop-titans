@@ -80,6 +80,11 @@ class QuestArea
      */
     private $prerequisite;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Chest::class, mappedBy="area")
+     */
+    private $chest;
+
     public function getId(): ?int { return $this->id; }
 
     public function getName(): ?string { return $this->name; }
@@ -127,6 +132,20 @@ class QuestArea
     public function setPrerequisite(?string $prerequisite): self
     {
         $this->prerequisite = $prerequisite;
+        return $this;
+    }
+
+    public function getChest(): ?Chest { return $this->chest; }
+
+    public function setChest(?Chest $chest): self
+    {
+        $this->chest = $chest;
+
+        $newArea = null === $chest ? null : $this;
+        if ($chest->getArea() !== $newArea) {
+            $chest->setArea($newArea);
+        }
+
         return $this;
     }
 }
