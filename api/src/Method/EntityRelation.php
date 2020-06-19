@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 Class EntityRelation extends Controller
 {
-    public function createOneToOne($em, $entity, $property, $relation)
+    public function createOneToOne($em, $entity, $property, $relation, $data=null)
     {
         $getProperty = "get".ucfirst($property);
         $setProperty = "set".ucfirst($property);
@@ -24,9 +24,23 @@ Class EntityRelation extends Controller
             )->setParameter('id', $id);
 
             if ($query->getResult()) {
-                throw new ResourceValidationException('Relation impossible : Ressource déjà en relation');
+                if (isset($data)) {
+                    if (!$data->$getProperty()) {
+                        throw new ResourceValidationException('Relation impossible : Ressource déjà en relation');
+                    } elseif ($data->$getProperty()->getId() != $query->getResult()[0]->getId()) {
+                        throw new ResourceValidationException('Relation impossible : Ressource déjà en relation');
+                    }
+                } else {
+                    throw new ResourceValidationException('Relation impossible : Ressource déjà en relation');
+                }
+            }
+            if (isset($data)) {
+                return $data->$setProperty($id);
             }
             return $entity->$setProperty($id);
+        }
+        if (isset($data)) {
+            return $data->$setProperty(null);
         }
         return $entity->$setProperty(null);
     }
