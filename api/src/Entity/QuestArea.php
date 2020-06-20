@@ -97,6 +97,11 @@ class QuestArea
      */
     private $lvls;
 
+    /**
+     * @ORM\OneToOne(targetEntity=QuestBoss::class, mappedBy="area")
+     */
+    private $boss;
+
     public function __construct()
     {
         $this->components = new ArrayCollection();
@@ -218,6 +223,20 @@ class QuestArea
             if ($lvl->getArea() === $this) {
                 $lvl->setArea(null);
             }
+        }
+
+        return $this;
+    }
+
+    public function getBoss(): ?QuestBoss { return $this->boss; }
+
+    public function setBoss(?QuestBoss $boss): self
+    {
+        $this->boss = $boss;
+
+        $newArea = null === $boss ? null : $this;
+        if ($boss->getArea() !== $newArea) {
+            $boss->setArea($newArea);
         }
 
         return $this;
