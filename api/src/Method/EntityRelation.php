@@ -27,7 +27,7 @@ Class EntityRelation extends Controller
                 if (isset($data)) {
                     if (!$data->$getProperty()) {
                         throw new ResourceValidationException('Relation impossible : Ressource déjà en relation');
-                    } elseif ($data->$getProperty()->getId() != $query->getResult()[0]->getId()) {
+                    } if ($data->getId() != $query->getResult()[0]->getId()) {
                         throw new ResourceValidationException('Relation impossible : Ressource déjà en relation');
                     }
                 } else {
