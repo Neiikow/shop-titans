@@ -57,6 +57,11 @@ class Pack
      */
     private $releaseDate;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Worker::class, mappedBy="pack")
+     */
+    private $worker;
+
     public function getId(): ?int { return $this->id; }
 
     public function getName(): ?string { return $this->name; }
@@ -88,6 +93,20 @@ class Pack
     public function setReleaseDate(?\DateTimeInterface $releaseDate): self
     {
         $this->releaseDate = $releaseDate;
+        return $this;
+    }
+
+    public function getWorker(): ?Worker { return $this->worker; }
+
+    public function setWorker(?Worker $worker): self
+    {
+        $this->worker = $worker;
+
+        $newPack = null === $worker ? null : $this;
+        if ($worker->getPack() !== $newPack) {
+            $worker->setPack($newPack);
+        }
+
         return $this;
     }
 }
