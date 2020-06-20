@@ -102,10 +102,16 @@ class QuestArea
      */
     private $boss;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Quest::class, mappedBy="area")
+     */
+    private $quests;
+
     public function __construct()
     {
         $this->components = new ArrayCollection();
         $this->lvls = new ArrayCollection();
+        $this->quests = new ArrayCollection();
     }
 
     public function getId(): ?int { return $this->id; }
@@ -237,6 +243,34 @@ class QuestArea
         $newArea = null === $boss ? null : $this;
         if ($boss->getArea() !== $newArea) {
             $boss->setArea($newArea);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Quest[]
+     */
+    public function getQuests(): Collection { return $this->quests; }
+
+    public function addQuest(Quest $quest): self
+    {
+        if (!$this->quests->contains($quest)) {
+            $this->quests[] = $quest;
+            $quest->setArea($this);
+        }
+
+        return $this;
+    }
+
+    public function removeQuest(Quest $quest): self
+    {
+        if ($this->quests->contains($quest)) {
+            $this->quests->removeElement($quest);
+
+            if ($quest->getArea() === $this) {
+                $quest->setArea(null);
+            }
         }
 
         return $this;
