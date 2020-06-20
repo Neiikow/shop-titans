@@ -92,9 +92,15 @@ class QuestArea
      */
     private $components;
 
+    /**
+     * @ORM\OneToMany(targetEntity=QuestLvl::class, mappedBy="area")
+     */
+    private $lvls;
+
     public function __construct()
     {
         $this->components = new ArrayCollection();
+        $this->lvls = new ArrayCollection();
     }
 
     public function getId(): ?int { return $this->id; }
@@ -183,6 +189,34 @@ class QuestArea
 
             if ($component->getArea() === $this) {
                 $component->setArea(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|QuestLvl[]
+     */
+    public function getLvls(): Collection { return $this->lvls; }
+
+    public function addLvl(QuestLvl $lvl): self
+    {
+        if (!$this->lvls->contains($lvl)) {
+            $this->lvls[] = $lvl;
+            $lvl->setArea($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLvl(QuestLvl $lvl): self
+    {
+        if ($this->lvls->contains($lvl)) {
+            $this->lvls->removeElement($lvl);
+
+            if ($lvl->getArea() === $this) {
+                $lvl->setArea(null);
             }
         }
 
