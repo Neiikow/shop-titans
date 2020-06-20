@@ -113,6 +113,13 @@ class Skill
      */
     private $rarity;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Champion::class, inversedBy="skill")
+     * 
+     * @JMS\MaxDepth(1)
+     */
+    private $champion;
+
     public function getId(): ?int { return $this->id; }
 
     public function getName(): ?string { return $this->name; }
@@ -198,6 +205,14 @@ class Skill
     public function setRarity(string $rarity): self
     {
         $this->rarity = $rarity;
+        return $this;
+    }
+
+    public function getChampion(): ?Champion {  return $this->champion; }
+
+    public function setChampion(?Champion $champion): self
+    {
+        $this->champion = $champion;
         return $this;
     }
 }
