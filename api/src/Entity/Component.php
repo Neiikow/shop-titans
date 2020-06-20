@@ -73,6 +73,8 @@ class Component
 
     /**
      * @ORM\ManyToOne(targetEntity=QuestArea::class, inversedBy="components")
+     * 
+     * @JMS\MaxDepth(1)
      */
     private $area;
 
