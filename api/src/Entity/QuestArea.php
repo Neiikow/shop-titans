@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\QuestAreaRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -85,6 +87,16 @@ class QuestArea
      */
     private $chest;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Component::class, mappedBy="area")
+     */
+    private $components;
+
+    public function __construct()
+    {
+        $this->components = new ArrayCollection();
+    }
+
     public function getId(): ?int { return $this->id; }
 
     public function getName(): ?string { return $this->name; }
@@ -144,6 +156,34 @@ class QuestArea
         $newArea = null === $chest ? null : $this;
         if ($chest->getArea() !== $newArea) {
             $chest->setArea($newArea);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Component[]
+     */
+    public function getComponents(): Collection { return $this->components; }
+
+    public function addComponent(Component $component): self
+    {
+        if (!$this->components->contains($component)) {
+            $this->components[] = $component;
+            $component->setArea($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComponent(Component $component): self
+    {
+        if ($this->components->contains($component)) {
+            $this->components->removeElement($component);
+
+            if ($component->getArea() === $this) {
+                $component->setArea(null);
+            }
         }
 
         return $this;
