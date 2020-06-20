@@ -44,7 +44,6 @@ class Quest
     /**
      * @ORM\Column(type="boolean")
      * 
-     * @Assert\NotBlank
      * @Assert\Type("boolean")
      */
     private $isBoss;
