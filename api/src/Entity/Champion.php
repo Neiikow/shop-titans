@@ -140,7 +140,7 @@ class Champion
     /**
      * @ORM\OneToMany(targetEntity=Skill::class, mappedBy="champion")
      * 
-     * @JMS\MaxDepth(1)
+     * @JMS\MaxDepth(2)
      */
     private $skill;
 

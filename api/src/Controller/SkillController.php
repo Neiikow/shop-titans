@@ -69,6 +69,7 @@ class SkillController extends FOSRestController
         }
 
         $em = $this->getDoctrine()->getManager();
+        $er = new EntityRelation;
         $data = $em->getRepository(Skill::class)->find($id);        
 
         if (!$data) {
@@ -76,6 +77,8 @@ class SkillController extends FOSRestController
                 'Compétence introuvable'
             );
         }
+
+        $er->createManyToOne($em, $skill, "champion", "Champion", $data);
 
         $data->setName($skill->getName());
         $data->setImg($skill->getImg());
