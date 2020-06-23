@@ -93,7 +93,7 @@ class QuestArea
     private $components;
 
     /**
-     * @ORM\OneToMany(targetEntity=QuestLvl::class, mappedBy="area")
+     * @ORM\OneToMany(targetEntity=QuestLvl::class, mappedBy="area", orphanRemoval=true)
      */
     private $lvls;
 

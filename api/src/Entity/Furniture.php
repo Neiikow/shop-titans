@@ -57,7 +57,7 @@ class Furniture
     private $type;
 
     /**
-     * @ORM\OneToMany(targetEntity=FurnitureUpgrade::class, mappedBy="furniture")
+     * @ORM\OneToMany(targetEntity=FurnitureUpgrade::class, mappedBy="furniture", orphanRemoval=true)
      */
     private $upgrades;
 

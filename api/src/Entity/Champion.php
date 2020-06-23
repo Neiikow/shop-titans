@@ -144,9 +144,15 @@ class Champion
      */
     private $skill;
 
+    /**
+     * @ORM\OneToMany(targetEntity=ChampionRank::class, mappedBy="champion", orphanRemoval=true)
+     */
+    private $ranks;
+
     public function __construct()
     {
         $this->skill = new ArrayCollection();
+        $this->ranks = new ArrayCollection();
     }
 
     public function getId(): ?int { return $this->id; }
@@ -270,6 +276,34 @@ class Champion
 
             if ($skill->getChampion() === $this) {
                 $skill->setChampion(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ChampionRank[]
+     */
+    public function getRanks(): Collection { return $this->ranks; }
+
+    public function addRank(ChampionRank $rank): self
+    {
+        if (!$this->ranks->contains($rank)) {
+            $this->ranks[] = $rank;
+            $rank->setChampion($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRank(ChampionRank $rank): self
+    {
+        if ($this->ranks->contains($rank)) {
+            $this->ranks->removeElement($rank);
+
+            if ($rank->getChampion() === $this) {
+                $rank->setChampion(null);
             }
         }
 

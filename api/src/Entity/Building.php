@@ -118,7 +118,7 @@ class Building
     private $owner;
 
     /**
-     * @ORM\OneToMany(targetEntity=BuildingLvl::class, mappedBy="building")
+     * @ORM\OneToMany(targetEntity=BuildingLvl::class, mappedBy="building", orphanRemoval=true)
      */
     private $lvls;
 
