@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\BuildingRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -115,6 +117,16 @@ class Building
      */
     private $owner;
 
+    /**
+     * @ORM\OneToMany(targetEntity=BuildingLvl::class, mappedBy="building")
+     */
+    private $lvls;
+
+    public function __construct()
+    {
+        $this->lvls = new ArrayCollection();
+    }
+
     public function getId(): ?int { return $this->id; }
 
     public function getName(): ?string { return $this->name; }
@@ -194,6 +206,34 @@ class Building
     public function setOwner(?Character $owner): self
     {
         $this->owner = $owner;
+        return $this;
+    }
+
+    /**
+     * @return Collection|BuildingLvl[]
+     */
+    public function getLvls(): Collection { return $this->lvls; }
+
+    public function addLvl(BuildingLvl $lvl): self
+    {
+        if (!$this->lvls->contains($lvl)) {
+            $this->lvls[] = $lvl;
+            $lvl->setBuilding($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLvl(BuildingLvl $lvl): self
+    {
+        if ($this->lvls->contains($lvl)) {
+            $this->lvls->removeElement($lvl);
+
+            if ($lvl->getBuilding() === $this) {
+                $lvl->setBuilding(null);
+            }
+        }
+
         return $this;
     }
 }
