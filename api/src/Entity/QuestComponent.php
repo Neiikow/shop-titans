@@ -41,11 +41,15 @@ class QuestComponent
 
     /**
      * @ORM\ManyToOne(targetEntity=Component::class, inversedBy="quests")
+     * 
+     * @JMS\MaxDepth(1)
      */
     private $component;
 
     /**
      * @ORM\ManyToOne(targetEntity=Quest::class, inversedBy="components")
+     * 
+     * @JMS\MaxDepth(1)
      */
     private $quest;
 
