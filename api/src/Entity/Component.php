@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ComponentRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -78,6 +80,16 @@ class Component
      */
     private $area;
 
+    /**
+     * @ORM\OneToMany(targetEntity=QuestComponent::class, mappedBy="component", orphanRemoval=true)
+     */
+    private $quests;
+
+    public function __construct()
+    {
+        $this->quests = new ArrayCollection();
+    }
+
     public function getId(): ?int { return $this->id; }
 
     public function getName(): ?string { return $this->name; }
@@ -125,6 +137,34 @@ class Component
     public function setArea(?QuestArea $area): self
     {
         $this->area = $area;
+        return $this;
+    }
+
+    /**
+     * @return Collection|QuestComponent[]
+     */
+    public function getQuests(): Collection { return $this->quests; }
+
+    public function addQuest(QuestComponent $quest): self
+    {
+        if (!$this->quests->contains($quest)) {
+            $this->quests[] = $quest;
+            $quest->setComponent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeQuest(QuestComponent $quest): self
+    {
+        if ($this->quests->contains($quest)) {
+            $this->quests->removeElement($quest);
+
+            if ($quest->getComponent() === $this) {
+                $quest->setComponent(null);
+            }
+        }
+
         return $this;
     }
 }
