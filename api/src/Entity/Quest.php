@@ -162,6 +162,11 @@ class Quest
      */
     private $components;
 
+    /**
+     * @ORM\OneToOne(targetEntity=QuestKey::class, mappedBy="quest", orphanRemoval=true)
+     */
+    private $keyDrop;
+
     public function __construct()
     {
         $this->components = new ArrayCollection();
@@ -304,6 +309,20 @@ class Quest
             if ($component->getQuest() === $this) {
                 $component->setQuest(null);
             }
+        }
+
+        return $this;
+    }
+
+    public function getKeyDrop(): ?QuestKey { return $this->keyDrop; }
+
+    public function setKeyDrop(?QuestKey $keyDrop): self
+    {
+        $this->keyDrop = $keyDrop;
+
+        $newQuest = null === $keyDrop ? null : $this;
+        if ($keyDrop->getQuest() !== $newQuest) {
+            $keyDrop->setQuest($newQuest);
         }
 
         return $this;
